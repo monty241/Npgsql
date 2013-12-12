@@ -119,6 +119,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlGenerators\SqlBaseGenerator.cs" />
     <Compile Include="SqlGenerators\SqlDeleteGenerator.cs" />
+    <Compile Include="SqlGenerators\SqlFunctionGenerator.cs" />
     <Compile Include="SqlGenerators\SqlInsertGenerator.cs" />
     <Compile Include="SqlGenerators\SqlSelectGenerator.cs" />
     <Compile Include="SqlGenerators\SqlUpdateGenerator.cs" />
@@ -128,9 +129,7 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Npgsql\Npgsql.csproj">
       <Project>{9d13b739-62b1-4190-b386-7a9547304eb3}</Project>
