@@ -357,7 +357,11 @@ namespace Npgsql
 
             } while (Connector != null && !Connector.IsValid());
 
-            if (Connector != null) return Connector;
+            if (Connector != null)
+            {
+                Connector.ResetSession();
+                return Connector;
+            }
 
             lock (Queue)
             {

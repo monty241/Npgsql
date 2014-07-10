@@ -310,7 +310,15 @@ namespace Npgsql
                                 throw new NpgsqlException(errors);
                             }
 
-                            yield break;
+                            if (context.pendingReadyForQueryPacketsToIgnore == 0)
+                            {
+                                yield break;
+                            }
+                            else
+                            {
+                                context.pendingReadyForQueryPacketsToIgnore--;
+                            }
+                            break;
 
                         case BackEndMessageCode.BackendKeyData:
 
@@ -330,7 +338,15 @@ namespace Npgsql
 
                         case BackEndMessageCode.CompletedResponse:
                             PGUtil.ReadInt32(stream);
-                            yield return new CompletedResponse(stream);
+                            if (context.pendingCompletePacketsToIgnore == 0)
+                            {
+                                yield return new CompletedResponse(stream);
+                            }
+                            else
+                            {
+                                new CompletedResponse(stream);
+                                context.pendingCompletePacketsToIgnore--;
+                            }
                             break;
                         case BackEndMessageCode.ParseComplete:
                             NpgsqlEventLog.LogMsg(resman, "Log_ProtocolMessage", LogLevel.Debug, "ParseComplete");

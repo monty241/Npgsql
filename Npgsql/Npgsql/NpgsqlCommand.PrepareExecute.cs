@@ -46,6 +46,22 @@ namespace Npgsql
     /// </summary>
     public sealed partial class NpgsqlCommand : DbCommand, ICloneable
     {
+        internal static void ExecuteBlindDontWaitForResponse(NpgsqlConnector connector, string command, int numQueries, int numCommands)
+        {
+            ExecuteBlindDontWaitForResponse(connector, new NpgsqlQuery(command), numQueries, numCommands);
+        }
+
+        /// <summary>
+        /// Internal query method to run when the wire shouldn't be flushed and
+        /// the response should be discarded later.
+        /// </summary>
+        internal static void ExecuteBlindDontWaitForResponse(NpgsqlConnector connector, NpgsqlQuery query, int numQueries, int numCommands)
+        {
+            connector.Query(query);
+            connector.pendingCompletePacketsToIgnore += numQueries;
+            connector.pendingReadyForQueryPacketsToIgnore += numCommands;
+        }
+
         /// <summary>
         /// Internal query shortcut for use in cases where the number
         /// of affected rows is of no interest.

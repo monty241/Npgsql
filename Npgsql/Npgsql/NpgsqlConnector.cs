@@ -166,6 +166,9 @@ namespace Npgsql
         // expect a ready_for_query response.
         private bool _requireReadyForQuery = true;
 
+        internal int pendingCompletePacketsToIgnore = 0;
+        internal int pendingReadyForQueryPacketsToIgnore = 0;
+
         private readonly Dictionary<string, NpgsqlParameterStatus> _serverParameters =
             new Dictionary<string, NpgsqlParameterStatus>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -173,6 +176,8 @@ namespace Npgsql
         private readonly RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
 
         private string initQueries;
+        private int numInitQueries = 0;
+        private int numInitCommands = 0;
 
 #if WINDOWS && UNMANAGED
 
@@ -373,6 +378,7 @@ namespace Npgsql
         {
             try
             {
+                /*
                 // Here we use a fake NpgsqlCommand, just to send the test query string.
 
                 // Get random test value.
@@ -397,7 +403,8 @@ namespace Npgsql
                 {
                     return false;
                 }
-
+                */
+                
                 this.RequireReadyForQuery = true;
             }
             catch
@@ -406,6 +413,18 @@ namespace Npgsql
             }
 
             return true;
+        }
+
+        internal void ResetSession()
+        {
+            if (SupportsDiscard)
+            {
+                NpgsqlCommand.ExecuteBlindDontWaitForResponse(this, NpgsqlQuery.DiscardAll, 1, 1);
+            }
+            if (numInitCommands > 0)
+            {
+                NpgsqlCommand.ExecuteBlindDontWaitForResponse(this, initQueries, numInitQueries, numInitCommands);
+            }
         }
 
         /// <summary>
@@ -429,7 +448,7 @@ namespace Npgsql
 
         internal void ReleaseWithDiscard()
         {
-            NpgsqlCommand.ExecuteBlind(this, NpgsqlQuery.DiscardAll);
+            //NpgsqlCommand.ExecuteBlind(this, NpgsqlQuery.DiscardAll);
 
             // The initial connection parameters will be restored via IsValid() when get connector from pool later 
         }
@@ -821,14 +840,18 @@ namespace Npgsql
             if (SupportsExtraFloatDigits3)
             {
                 sbInitQueries.WriteLine("SET extra_float_digits=3;");
+                numInitQueries++;
             }
 
             if (SupportsSslRenegotiationLimit)
             {
                 sbInitQueries.WriteLine("SET ssl_renegotiation_limit=0;");
+                numInitQueries++;
             }
 
             initQueries = sbInitQueries.ToString();
+            if (numInitQueries > 0)
+                numInitCommands = 1;
 
             NpgsqlCommand.ExecuteBlind(this, initQueries);
 
