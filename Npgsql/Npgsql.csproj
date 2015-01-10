@@ -294,6 +294,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackendMessages\DataRowNonSequentialMessage.cs" />
+    <Compile Include="BackendMessages\FunctionCallResponseMessage.cs" />
     <Compile Include="BackendMessages\NoDataMessage.cs" />
     <Compile Include="BackendMessages\ParameterDescriptionMessage.cs" />
     <Compile Include="BackendMessages\CommandCompleteMessage.cs" />
@@ -310,6 +311,7 @@
     <Compile Include="FrontendMessages\DescribeMessage.cs" />
     <Compile Include="FrontendMessages\CloseMessage.cs" />
     <Compile Include="FrontendMessages\BindMessage.cs" />
+    <Compile Include="FrontendMessages\FastpathMessage.cs" />
     <Compile Include="FrontendMessages\PasswordMessage.cs" />
     <Compile Include="FrontendMessages\SyncMessage.cs" />
     <Compile Include="FrontendMessages\FlushMessage.cs" />
@@ -320,6 +322,8 @@
       <DependentUpon>NpgsqlBuffer.cs</DependentUpon>
       <Generator>AsyncGenerator</Generator>
     </Compile>
+    <Compile Include="NpgsqlLargeObjectManager.cs" />
+    <Compile Include="NpgsqlLargeObjectStream.cs" />
     <Compile Include="NpgsqlTextWriter.cs" />
     <Compile Include="NpgsqlTypes\ArrayHandling.cs" />
     <Compile Include="NpgsqlTypes\NpgsqlRange.cs" />

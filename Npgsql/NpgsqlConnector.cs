@@ -161,6 +161,7 @@ namespace Npgsql
         readonly ParameterDescriptionMessage _parameterDescriptionMessage = new ParameterDescriptionMessage();
         readonly DataRowSequentialMessage    _dataRowSequentialMessage    = new DataRowSequentialMessage();
         readonly DataRowNonSequentialMessage _dataRowNonSequentialMessage = new DataRowNonSequentialMessage();
+        readonly FunctionCallResponseMessage _functionCallResponseMessage = new FunctionCallResponseMessage();
 
         #endregion
 
@@ -775,7 +776,7 @@ namespace Npgsql
                 Contract.Assume(Enum.IsDefined(typeof(BackendMessageCode), messageCode), "Unknown message code: " + messageCode);
                 var len = Buffer.ReadInt32() - 4;  // Transmitted length includes itself
 
-                if (messageCode == BackendMessageCode.DataRow && dataRowLoadingMode != DataRowLoadingMode.NonSequential)
+                if ((messageCode == BackendMessageCode.DataRow || messageCode == BackendMessageCode.FunctionCallResponse) && dataRowLoadingMode != DataRowLoadingMode.NonSequential)
                 {
                     if (dataRowLoadingMode == DataRowLoadingMode.Skip)
                     {
@@ -883,8 +884,8 @@ namespace Npgsql
                 case BackendMessageCode.ErrorResponse:
                     return null;
                 case BackendMessageCode.FunctionCallResponse:
-                    // We don't use the obsolete function call protocol
-                    throw new Exception("Unexpected backend message: " + code);
+                    Contract.Assert(dataRowLoadingMode == DataRowLoadingMode.Sequential);
+                    return _functionCallResponseMessage.Load(buf);
                 default:
                     throw PGUtil.ThrowIfReached("Unknown backend message code: " + code);
             }
