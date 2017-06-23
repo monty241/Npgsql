@@ -5,12 +5,12 @@ Npgsql - .NET Data Provider for PostgreSQL
 ![Unstable nuget](https://img.shields.io/myget/npgsql-unstable/v/npgsql.svg?label=unstable%20nuget)
 [![Build Status](https://img.shields.io/teamcity/http/build.npgsql.org/s/npgsql.svg?label=TeamCity)](http://build.npgsql.org/viewType.html?buildTypeId=npgsql&guest=1) [![Join the chat at https://gitter.im/npgsql/npsgl](https://img.shields.io/badge/GITTER-JOIN%20CHAT-brightgreen.svg)](https://gitter.im/npgsql/npgsql)
 
-###What Is Npgsql?
+### What Is Npgsql?
 
 Npgsql is a .Net Data Provider for PostgreSQL. It allows you to connect and interact with PostgreSQL server using .NET.
 
 
-###Project Information
+### Project Information
 
 +   [Offical Site][1]
 +   [Npgsql source code @ GitHub][2]
@@ -20,7 +20,7 @@ Npgsql is a .Net Data Provider for PostgreSQL. It allows you to connect and inte
 Nuget packages are published as part of our CI process, use with extreme caution.
 The feed URL is: https://www.myget.org/F/npgsql-unstable
 
-###Developers
+### Developers
 
 Developers who contributes to Npgsql currently or in past, in no particular order:
     
@@ -40,7 +40,7 @@ Developers who contributes to Npgsql currently or in past, in no particular orde
 +   Kenji Uno
 +   Emil Lenngren
 
-###License
+### License
 
 Refer LICENSE.txt for more information on license terms.
 
